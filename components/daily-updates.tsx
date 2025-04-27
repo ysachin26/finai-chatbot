@@ -125,7 +125,7 @@ export function DailyUpdates() {
       category: "Policy",
       source: "Financial Times",
       url: "https://www.imf.org/en/Topics/digital-payments-and-finance/central-bank-digital-currency/virtual-handbook",
-      imageUrl: "/images/largest-bank-1536x864.jpg",
+      imageUrl: "/Images/largest-bank-1536x864.jpg",
     },
     {
       id: "news2",
