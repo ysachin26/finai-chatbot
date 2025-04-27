@@ -1,7 +1,14 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { LockKeyhole } from "lucide-react"
-import Link from "next/link"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { LockKeyhole } from "lucide-react";
+import Link from "next/link";
 
 export default function LoginRedirect() {
   return (
@@ -12,10 +19,14 @@ export default function LoginRedirect() {
             <LockKeyhole className="h-6 w-6 text-teal-600 dark:text-teal-400" />
           </div>
           <CardTitle className="text-2xl">Login Required</CardTitle>
-          <CardDescription>You need to be logged in to access this feature</CardDescription>
+          <CardDescription>
+            You need to be logged in to access this feature
+          </CardDescription>
         </CardHeader>
         <CardContent className="text-center text-gray-600 dark:text-gray-400">
-          <p>Please log in to your account to use the chat and wallet features.</p>
+          <p>
+            Please log in to your account to use the chat and wallet features.
+          </p>
         </CardContent>
         <CardFooter className="flex justify-center">
           <Link href="/login">
@@ -26,5 +37,5 @@ export default function LoginRedirect() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

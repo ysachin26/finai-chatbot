@@ -1,30 +1,42 @@
-"use client"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { CalendarDays, TrendingUp, TrendingDown, ArrowRight, ExternalLink } from "lucide-react"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+"use client";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  CalendarDays,
+  TrendingUp,
+  TrendingDown,
+  ArrowRight,
+  ExternalLink,
+} from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface MarketUpdate {
-  id: string
-  title: string
-  description: string
-  date: string
-  change: number
-  category: "Crypto" | "Stocks" | "Forex" | "Commodities"
-  source: string
-  url: string
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  change: number;
+  category: "Crypto" | "Stocks" | "Forex" | "Commodities";
+  source: string;
+  url: string;
 }
 
 interface NewsUpdate {
-  id: string
-  title: string
-  description: string
-  date: string
-  category: "Policy" | "Technology" | "Markets" | "Economy"
-  source: string
-  url: string
-  imageUrl: string
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  category: "Policy" | "Technology" | "Markets" | "Economy";
+  source: string;
+  url: string;
+  imageUrl: string;
 }
 
 export function DailyUpdates() {
@@ -33,13 +45,14 @@ export function DailyUpdates() {
     year: "numeric",
     month: "long",
     day: "numeric",
-  })
+  });
 
   const marketUpdates: MarketUpdate[] = [
     {
       id: "market1",
       title: "Bitcoin (BTC)",
-      description: "Bitcoin reaches new monthly high as institutional adoption increases.",
+      description:
+        "Bitcoin reaches new monthly high as institutional adoption increases.",
       date: currentDate,
       change: 3.45,
       category: "Crypto",
@@ -49,7 +62,8 @@ export function DailyUpdates() {
     {
       id: "market2",
       title: "Ethereum (ETH)",
-      description: "Ethereum gains momentum following successful network upgrade.",
+      description:
+        "Ethereum gains momentum following successful network upgrade.",
       date: currentDate,
       change: 5.12,
       category: "Crypto",
@@ -59,7 +73,8 @@ export function DailyUpdates() {
     {
       id: "market3",
       title: "S&P 500",
-      description: "S&P 500 dips slightly as investors await Federal Reserve announcement.",
+      description:
+        "S&P 500 dips slightly as investors await Federal Reserve announcement.",
       date: currentDate,
       change: -0.32,
       category: "Stocks",
@@ -79,7 +94,8 @@ export function DailyUpdates() {
     {
       id: "market5",
       title: "EUR/USD",
-      description: "Euro strengthens against dollar following positive economic data.",
+      description:
+        "Euro strengthens against dollar following positive economic data.",
       date: currentDate,
       change: 0.75,
       category: "Forex",
@@ -89,14 +105,15 @@ export function DailyUpdates() {
     {
       id: "market6",
       title: "Stellar (XLM)",
-      description: "Stellar Lumens shows strong performance as adoption grows in cross-border payments.",
+      description:
+        "Stellar Lumens shows strong performance as adoption grows in cross-border payments.",
       date: currentDate,
       change: 4.23,
       category: "Crypto",
       source: "CoinTelegraph",
       url: "#",
     },
-  ]
+  ];
 
   const newsUpdates: NewsUpdate[] = [
     {
@@ -107,8 +124,8 @@ export function DailyUpdates() {
       date: currentDate,
       category: "Policy",
       source: "Financial Times",
-      url: "#",
-      imageUrl: "/placeholder.svg?height=100&width=200&text=Central+Banks",
+      url: "https://www.imf.org/en/Topics/digital-payments-and-finance/central-bank-digital-currency/virtual-handbook",
+      imageUrl: "/images/largest-bank-1536x864.jpg",
     },
     {
       id: "news2",
@@ -118,18 +135,19 @@ export function DailyUpdates() {
       date: currentDate,
       category: "Technology",
       source: "TechCrunch",
-      url: "#",
-      imageUrl: "/placeholder.svg?height=100&width=200&text=Blockchain+Payments",
+      url: "https://www.investopedia.com/terms/b/blockchain.asp",
+      imageUrl: "/Images/blockchain.jpg",
     },
     {
       id: "news3",
       title: "Global Markets React to Inflation Data",
-      description: "Markets show mixed reactions as inflation data exceeds expectations in several economies.",
+      description:
+        "Markets show mixed reactions as inflation data exceeds expectations in several economies.",
       date: currentDate,
       category: "Markets",
       source: "Wall Street Journal",
-      url: "#",
-      imageUrl: "/placeholder.svg?height=100&width=200&text=Inflation+Data",
+      url: "https://www.ig.com/en/trading-strategies/how-does-inflation-affect-the-stock-market-210423",
+      imageUrl: "Images/global-market.jpg",
     },
     {
       id: "news4",
@@ -139,15 +157,17 @@ export function DailyUpdates() {
       date: currentDate,
       category: "Technology",
       source: "Blockchain News",
-      url: "#",
-      imageUrl: "/placeholder.svg?height=100&width=200&text=Stellar+Network",
+      url: "https://stellar.org/learn/the-power-of-stellar",
+      imageUrl: "Images/stellar.jpeg",
     },
-  ]
+  ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Daily Financial Updates</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Daily Financial Updates
+        </h2>
         <p className="text-gray-500 dark:text-gray-400">
           Stay informed with the latest financial news and market trends
         </p>
@@ -176,7 +196,9 @@ export function DailyUpdates() {
                     </Badge>
                     <div
                       className={`flex items-center ${
-                        update.change >= 0 ? "text-green-600 dark:text-green-400" : "text-red-600 dark:text-red-400"
+                        update.change >= 0
+                          ? "text-green-600 dark:text-green-400"
+                          : "text-red-600 dark:text-red-400"
                       }`}
                     >
                       {update.change >= 0 ? (
@@ -207,7 +229,12 @@ export function DailyUpdates() {
                     className="p-0 h-auto mt-2 text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                     asChild
                   >
-                    <a href={update.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
+                    <a
+                      href={update.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center"
+                    >
                       Read more <ArrowRight className="h-3 w-3 ml-1" />
                     </a>
                   </Button>
@@ -245,18 +272,30 @@ export function DailyUpdates() {
                         {news.date}
                       </div>
                     </div>
-                    <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-2">{news.title}</h3>
-                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">{news.description}</p>
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-2">
+                      {news.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 line-clamp-2">
+                      {news.description}
+                    </p>
                     <div className="flex justify-between items-center mt-auto">
-                      <div className="text-xs text-gray-500 dark:text-gray-400">Source: {news.source}</div>
+                      <div className="text-xs text-gray-500 dark:text-gray-400">
+                        Source: {news.source}
+                      </div>
                       <Button
                         variant="link"
                         size="sm"
                         className="p-0 h-auto text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300"
                         asChild
                       >
-                        <a href={news.url} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                          Read full article <ExternalLink className="h-3 w-3 ml-1" />
+                        <a
+                          href={news.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center"
+                        >
+                          Read full article{" "}
+                          <ExternalLink className="h-3 w-3 ml-1" />
                         </a>
                       </Button>
                     </div>
@@ -268,5 +307,5 @@ export function DailyUpdates() {
         </TabsContent>
       </Tabs>
     </div>
-  )
+  );
 }

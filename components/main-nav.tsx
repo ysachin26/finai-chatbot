@@ -1,80 +1,92 @@
-"use client"
+"use client";
 
-import { usePathname, useRouter } from "next/navigation"
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Moon, Sun, MessageSquare, Wallet, BookOpen, User, LogOut, LogIn } from "lucide-react"
-import Link from "next/link"
-import { useAuth } from "@/hooks/use-auth"
-import { getFromStorage } from "@/lib/storage-service"
+import { usePathname, useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Moon,
+  Sun,
+  MessageSquare,
+  Wallet,
+  BookOpen,
+  User,
+  LogOut,
+  LogIn,
+} from "lucide-react";
+import Link from "next/link";
+import { useAuth } from "@/hooks/use-auth";
+import { getFromStorage } from "@/lib/storage-service";
 
 export function MainNav() {
-  const pathname = usePathname()
-  const router = useRouter()
-  const { theme, setTheme } = useTheme()
-  const { isLoggedIn, logout } = useAuth()
-  const [mounted, setMounted] = useState(false)
-  const [walletBalance, setWalletBalance] = useState<string | null>(null)
+  const pathname = usePathname();
+  const router = useRouter();
+  const { theme, setTheme } = useTheme();
+  const { isLoggedIn, logout } = useAuth();
+  const [mounted, setMounted] = useState(false);
+  const [walletBalance, setWalletBalance] = useState<string | null>(null);
 
   // After mounting, we can access localStorage
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    setMounted(true);
+  }, []);
 
   // Load wallet data whenever login state changes or component mounts
   useEffect(() => {
     if (isLoggedIn && mounted) {
-      const walletData = getFromStorage("finai-wallet", null)
+      const walletData = getFromStorage("finai-wallet", null);
       if (walletData && walletData.status === "created") {
-        setWalletBalance(walletData.balance)
+        setWalletBalance(walletData.balance);
       }
     }
-  }, [isLoggedIn, mounted])
+  }, [isLoggedIn, mounted]);
 
   // Add event listener for storage changes
   useEffect(() => {
     const handleStorageChange = () => {
       if (isLoggedIn) {
-        const walletData = getFromStorage("finai-wallet", null)
+        const walletData = getFromStorage("finai-wallet", null);
         if (walletData && walletData.status === "created") {
-          setWalletBalance(walletData.balance)
+          setWalletBalance(walletData.balance);
         }
       }
-    }
+    };
 
-    window.addEventListener("storage", handleStorageChange)
-    window.addEventListener("storage-updated", handleStorageChange)
+    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener("storage-updated", handleStorageChange);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange)
-      window.removeEventListener("storage-updated", handleStorageChange)
-    }
-  }, [isLoggedIn])
+      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener("storage-updated", handleStorageChange);
+    };
+  }, [isLoggedIn]);
 
   // Toggle theme between light and dark
   const toggleTheme = () => {
-    setTheme(theme === "dark" ? "light" : "dark")
-  }
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   // Handle logout
   const handleLogout = () => {
-    logout()
-    router.push("/")
-  }
+    logout();
+    router.push("/");
+  };
 
   // Only render theme toggle after mounting to avoid hydration mismatch
   if (!mounted) {
     return (
       <div className="flex justify-between items-center">
         <div className="flex items-center">
-          <Link href="/" className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mr-8">
+          <Link
+            href="/"
+            className="text-xl font-bold text-indigo-600 dark:text-indigo-400 mr-8"
+          >
             FinAI
           </Link>
         </div>
         <div className="w-9 h-9"></div> {/* Placeholder for theme toggle */}
       </div>
-    )
+    );
   }
 
   return (
@@ -181,9 +193,13 @@ export function MainNav() {
           className="rounded-full w-9 h-9 p-0 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
           aria-label="Toggle theme"
         >
-          {theme === "dark" ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          {theme === "dark" ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
         </Button>
       </div>
     </div>
-  )
+  );
 }

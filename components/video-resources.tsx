@@ -1,53 +1,69 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Play, Clock, BookOpen } from "lucide-react"
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Play, Clock, BookOpen } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface VideoResource {
-  id: string
-  title: string
-  description: string
-  thumbnail: string
-  duration: string
-  level: "Beginner" | "Intermediate" | "Advanced"
-  category: string
-  embedUrl: string
+  id: string;
+  title: string;
+  description: string;
+  thumbnail: string;
+  duration: string;
+  level: "Beginner" | "Intermediate" | "Advanced";
+  category: string;
+  embedUrl: string;
 }
 
 export function VideoResources() {
-  const [selectedVideo, setSelectedVideo] = useState<VideoResource | null>(null)
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [selectedVideo, setSelectedVideo] = useState<VideoResource | null>(
+    null
+  );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const videos: VideoResource[] = [
     {
       id: "video1",
       title: "Introduction to Blockchain Technology",
-      description: "Learn the fundamentals of blockchain technology and how it's revolutionizing finance.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=Blockchain+Basics",
+      description:
+        "Learn the fundamentals of blockchain technology and how it's revolutionizing finance.",
+      thumbnail: "Images/introtoblockchain.jpeg",
       duration: "15:30",
       level: "Beginner",
       category: "Blockchain",
-      embedUrl: "https://www.youtube.com/embed/SSo_EIwHSd4",
+      embedUrl: "https://www.youtube.com/embed/SSo_EIwHSd4?",
     },
     {
       id: "video2",
       title: "Understanding Stellar Blockchain",
-      description: "A comprehensive guide to the Stellar blockchain network and its financial applications.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=Stellar+Network",
+      description:
+        "A comprehensive guide to the Stellar blockchain network and its financial applications.",
+      thumbnail: "Images/stellar.jpeg",
       duration: "22:45",
       level: "Intermediate",
       category: "Stellar",
-      embedUrl: "https://www.youtube.com/embed/ixerXWJrDr0",
+      embedUrl: "https://www.youtube.com/embed/iHxUJoS5xZg?",
     },
     {
       id: "video3",
       title: "Personal Finance Basics",
-      description: "Essential personal finance concepts everyone should know for financial well-being.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=Personal+Finance",
+      description:
+        "Essential personal finance concepts everyone should know for financial well-being.",
+      thumbnail: "/Images/finance.jpg",
       duration: "18:20",
       level: "Beginner",
       category: "Personal Finance",
@@ -56,8 +72,9 @@ export function VideoResources() {
     {
       id: "video4",
       title: "Cryptocurrency Investment Strategies",
-      description: "Advanced strategies for investing in cryptocurrencies and managing risk.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=Crypto+Investing",
+      description:
+        "Advanced strategies for investing in cryptocurrencies and managing risk.",
+      thumbnail: "Images/financial-planning.jpg",
       duration: "27:15",
       level: "Advanced",
       category: "Investing",
@@ -66,35 +83,39 @@ export function VideoResources() {
     {
       id: "video5",
       title: "Digital Wallets Explained",
-      description: "How to set up and securely manage your digital cryptocurrency wallet.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=Digital+Wallets",
+      description:
+        "How to set up and securely manage your digital cryptocurrency wallet.",
+      thumbnail: "/Images/digitalwallet.png",
       duration: "12:40",
       level: "Beginner",
       category: "Security",
-      embedUrl: "https://www.youtube.com/embed/AlwrxqVmtP8",
+      embedUrl: "https://www.youtube.com/embed/2sU2uhjoex4?",
     },
     {
       id: "video6",
       title: "The Future of Decentralized Finance (DeFi)",
-      description: "Exploring the growing world of DeFi and its potential to transform traditional banking.",
-      thumbnail: "/placeholder.svg?height=180&width=320&text=DeFi+Future",
+      description:
+        "Exploring the growing world of DeFi and its potential to transform traditional banking.",
+      thumbnail: "/Images/futureoffinance.jpg",
       duration: "31:05",
       level: "Advanced",
       category: "DeFi",
       embedUrl: "https://www.youtube.com/embed/H-O3r2YMWJ4",
     },
-  ]
+  ];
 
   const openVideoDialog = (video: VideoResource) => {
-    setSelectedVideo(video)
-    setIsDialogOpen(true)
-  }
+    setSelectedVideo(video);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Video Learning Resources</h2>
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">
+            Video Learning Resources
+          </h2>
           <p className="text-gray-500 dark:text-gray-400">
             Watch educational videos to enhance your financial knowledge
           </p>
@@ -135,8 +156,8 @@ export function VideoResources() {
                       video.level === "Beginner"
                         ? "bg-green-50 text-green-700 border-green-200 dark:bg-green-900/30 dark:text-green-300 dark:border-green-800/50"
                         : video.level === "Intermediate"
-                          ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800/50"
-                          : "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800/50"
+                        ? "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-800/50"
+                        : "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-900/30 dark:text-amber-300 dark:border-amber-800/50"
                     }
                   `}
                 >
@@ -147,7 +168,9 @@ export function VideoResources() {
               <CardTitle className="text-lg mt-2 text-gray-900 dark:text-gray-100 line-clamp-1 group-hover:text-indigo-700 dark:group-hover:text-indigo-400 transition-colors duration-300">
                 {video.title}
               </CardTitle>
-              <CardDescription className="line-clamp-2">{video.description}</CardDescription>
+              <CardDescription className="line-clamp-2">
+                {video.description}
+              </CardDescription>
             </CardHeader>
             <CardContent className="pt-0 pb-4 mt-auto">
               <Button
@@ -174,8 +197,8 @@ export function VideoResources() {
                   selectedVideo?.level === "Beginner"
                     ? "bg-green-100 text-green-800 ml-2"
                     : selectedVideo?.level === "Intermediate"
-                      ? "bg-blue-100 text-blue-800 ml-2"
-                      : "bg-amber-100 text-amber-800 ml-2"
+                    ? "bg-blue-100 text-blue-800 ml-2"
+                    : "bg-amber-100 text-amber-800 ml-2"
                 }
               >
                 {selectedVideo?.level}
@@ -194,9 +217,11 @@ export function VideoResources() {
               className="rounded-md"
             ></iframe>
           </div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">{selectedVideo?.description}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            {selectedVideo?.description}
+          </p>
         </DialogContent>
       </Dialog>
     </div>
-  )
+  );
 }

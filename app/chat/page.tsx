@@ -1,7 +1,6 @@
 "use client";
 
 import type React from "react";
-
 import { useEffect, useState } from "react";
 import ChatInterface from "@/components/chat-interface";
 import { ConnectionStatus } from "@/components/connection-status";
@@ -15,8 +14,6 @@ import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getFromStorage, saveToStorage } from "@/lib/storage-service";
-import { useAuth } from "@/hooks/use-auth";
-import LoginRedirect from "@/components/login-redirect";
 
 interface ChatSession {
   id: string;
@@ -27,7 +24,6 @@ interface ChatSession {
 }
 
 export default function ChatPage() {
-  const { isLoggedIn, isLoading } = useAuth();
   const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
   const [activeSessionId, setActiveSessionId] = useState<string>("new");
 
@@ -43,7 +39,19 @@ export default function ChatPage() {
   }, []);
 
   const createNewSession = () => {
-    setActiveSessionId("new");
+    const newSession: ChatSession = {
+      id: `session-${Date.now()}`,
+      title: "New Chat",
+      preview: "Start a new conversation",
+      timestamp: new Date().toISOString(),
+      messages: [],
+    };
+
+    setChatSessions((prev) => [newSession, ...prev]);
+    setActiveSessionId(newSession.id);
+
+    // Save to storage
+    saveToStorage("finai-chat-sessions", [newSession, ...chatSessions]);
   };
 
   const deleteSession = (id: string, e: React.MouseEvent) => {
@@ -137,103 +145,93 @@ export default function ChatPage() {
     return id;
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        Loading...
-      </div>
-    );
-  }
-
-  if (!isLoggedIn) {
-    return <LoginRedirect />;
-  }
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-8rem)]">
-      {/* Chat history sidebar */}
-      <div className="lg:col-span-3 space-y-4 h-full overflow-hidden flex flex-col">
-        <Card className="border-indigo-200 dark:border-indigo-800 flex-1 overflow-hidden flex flex-col">
-          <CardHeader className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-t-lg py-3">
-            <CardTitle className="text-lg flex items-center gap-2">
-              <History className="h-5 w-5" />
-              Chat History
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-3 flex-1 overflow-hidden flex flex-col">
-            <Button
-              onClick={createNewSession}
-              className="w-full mb-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white flex items-center gap-2"
-            >
-              <MessageSquarePlus className="h-4 w-4" />
-              New Chat
-            </Button>
+    <div className="flex flex-col h-[calc(100vh-8rem)]">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 overflow-hidden">
+        {/* Chat history sidebar */}
+        <div className="lg:col-span-3 h-full overflow-hidden flex flex-col">
+          <Card className="border-indigo-200 dark:border-indigo-800 flex-1 overflow-hidden flex flex-col">
+            <CardHeader className="bg-gradient-to-r from-indigo-600 to-blue-600 text-white rounded-t-lg py-3">
+              <CardTitle className="text-lg flex items-center gap-2">
+                <History className="h-5 w-5" />
+                Chat History
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="p-3 flex-1 overflow-hidden flex flex-col">
+              <Button
+                onClick={createNewSession}
+                className="w-full mb-3 bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white flex items-center gap-2"
+              >
+                <MessageSquarePlus className="h-4 w-4" />
+                New Chat
+              </Button>
 
-            <ScrollArea className="flex-1">
-              <div className="space-y-2 pr-3">
-                {chatSessions.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-                    No chat history yet
-                  </div>
-                ) : (
-                  chatSessions.map((session) => (
-                    <div
-                      key={session.id}
-                      className={`p-3 rounded-lg border cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-700 group transition-all
-                        ${
-                          activeSessionId === session.id
-                            ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30"
-                            : "border-gray-200 dark:border-gray-700"
-                        }`}
-                      onClick={() => setActiveSessionId(session.id)}
-                    >
-                      <div className="flex justify-between items-start mb-1">
-                        <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 line-clamp-1">
-                          {session.title}
-                        </h3>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="h-6 w-6 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
-                          onClick={(e) => deleteSession(session.id, e)}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
-                        {session.preview || "..."}
-                      </p>
-                      <div className="text-xs text-gray-400 mt-1">
-                        {new Date(session.timestamp).toLocaleString()}
-                      </div>
+              <ScrollArea className="flex-1 h-[calc(100vh-16rem)]">
+                <div className="space-y-2 pr-3">
+                  {chatSessions.length === 0 ? (
+                    <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                      No chat history yet
                     </div>
-                  ))
-                )}
-              </div>
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </div>
+                  ) : (
+                    chatSessions.map((session) => (
+                      <div
+                        key={session.id}
+                        className={`p-3 rounded-lg border cursor-pointer hover:border-indigo-300 dark:hover:border-indigo-700 group transition-all
+                          ${
+                            activeSessionId === session.id
+                              ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30"
+                              : "border-gray-200 dark:border-gray-700"
+                          }`}
+                        onClick={() => setActiveSessionId(session.id)}
+                      >
+                        <div className="flex justify-between items-start mb-1">
+                          <h3 className="font-medium text-sm text-gray-900 dark:text-gray-100 line-clamp-1">
+                            {session.title}
+                          </h3>
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="h-6 w-6 text-gray-500 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity"
+                            onClick={(e) => deleteSession(session.id, e)}
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
+                          {session.preview || "..."}
+                        </p>
+                        <div className="text-xs text-gray-400 mt-1">
+                          {new Date(session.timestamp).toLocaleString()}
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </ScrollArea>
+            </CardContent>
+          </Card>
+        </div>
 
-      {/* Main chat area */}
-      <div className="lg:col-span-9 h-full flex flex-col">
-        <div className="mb-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <MessageCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-            <h1 className="text-2xl font-bold gradient-text">
-              Financial Assistant
-            </h1>
+        {/* Main chat area */}
+        <div className="lg:col-span-9 h-full flex flex-col">
+          <div className="mb-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <MessageCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
+              <h1 className="text-2xl font-bold gradient-text">
+                Financial Assistant
+              </h1>
+            </div>
           </div>
-        </div>
 
-        <div className="flex-1 overflow-hidden">
-          <ChatInterface
-            sessionId={activeSessionId}
-            onSaveSession={saveSession}
-          />
-        </div>
+          <div className="flex-1 overflow-hidden">
+            <ChatInterface
+              sessionId={activeSessionId}
+              onSaveSession={saveSession}
+            />
+          </div>
 
-        <ConnectionStatus />
+          <ConnectionStatus />
+        </div>
       </div>
     </div>
   );

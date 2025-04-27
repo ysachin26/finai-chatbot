@@ -87,7 +87,6 @@
     box-shadow: 0 0 0 0 rgba(79, 70, 229, 0);
   }
 }
-
 .cosmic-pulse {
   animation: cosmic-pulse 2s infinite;
 }
