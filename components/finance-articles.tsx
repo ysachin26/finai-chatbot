@@ -23,7 +23,7 @@ export function FinanceArticles() {
       date: "May 15, 2023",
       readTime: "8 min",
       category: "Blockchain",
-      imageUrl: "/images/blockchain.jpg",
+      imageUrl: "/Images/blockchain.jpg",
       url: "#",
     },
     {
@@ -33,7 +33,7 @@ export function FinanceArticles() {
       date: "June 3, 2023",
       readTime: "6 min",
       category: "Personal Finance",
-      imageUrl: "/images/financial-planning.jpg",
+      imageUrl: "/Images/financial-planning.jpg",
       url: "#",
     },
     {
@@ -43,7 +43,7 @@ export function FinanceArticles() {
       date: "April 22, 2023",
       readTime: "10 min",
       category: "Banking",
-      imageUrl: "/images/mobile-banking.jpg",
+      imageUrl: "/Images/mobile-banking.jpg",
       url: "#",
     },
   ]
