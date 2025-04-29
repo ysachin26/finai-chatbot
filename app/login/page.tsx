@@ -1,54 +1,46 @@
-"use client";
+"use client"
 
-import type React from "react";
-
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { Loader2, Lock, Smartphone } from "lucide-react";
-import { saveToStorage } from "@/lib/storage-service";
+import type React from "react"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { useRouter } from "next/navigation"
+import { Loader2, Lock, Smartphone } from "lucide-react"
+import { saveToStorage } from "@/lib/storage-service"
 
 export default function LoginPage() {
-  const router = useRouter();
-  const [step, setStep] = useState<"phone" | "otp">("phone");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOtp] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const router = useRouter()
+  const [step, setStep] = useState<"phone" | "otp">("phone")
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [otp, setOtp] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState("")
 
   const handleSendOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
 
     // Simulate sending OTP
     setTimeout(() => {
-      setIsLoading(false);
-      setStep("otp");
+      setIsLoading(false)
+      setStep("otp")
 
       // For demo purposes, show the OTP code (in a real app, this would be sent via SMS)
-      console.log("Demo OTP code: 123456");
-    }, 1500);
-  };
+      console.log("Demo OTP code: 123456")
+    }, 1500)
+  }
 
   const handleVerifyOTP = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    e.preventDefault()
+    setIsLoading(true)
+    setError("")
 
     // Simulate verifying OTP
     setTimeout(() => {
-      setIsLoading(false);
+      setIsLoading(false)
 
       // For demo purposes, any 6-digit code works
       if (otp.length === 6) {
@@ -57,28 +49,25 @@ export default function LoginPage() {
           isLoggedIn: true,
           phone: phoneNumber,
           loginTime: new Date().toISOString(),
-        };
-        saveToStorage("finai-auth", authData);
+        }
+        saveToStorage("finai-auth", authData)
 
         // Set cookie for server-side authentication
-        document.cookie = `finai-auth=${JSON.stringify(
-          authData
-        )}; path=/; max-age=86400`; // 24 hours
+        document.cookie = `finai-auth=${JSON.stringify(authData)}; path=/; max-age=86400` // 24 hours
 
-        router.push("/chat");
+        // Use window.location.href instead of router.push for a full page navigation
+        window.location.href = "/chat"
       } else {
-        setError("Invalid OTP. Please try again.");
+        setError("Invalid OTP. Please try again.")
       }
-    }, 1500);
-  };
+    }, 1500)
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-teal-50 to-emerald-50 dark:from-gray-950 dark:to-gray-900 p-4">
       <Card className="w-full max-w-md border-teal-200 dark:border-teal-800 shadow-xl">
         <CardHeader className="space-y-1 bg-gradient-to-r from-teal-600 to-emerald-600 text-white rounded-t-lg">
-          <CardTitle className="text-2xl font-bold text-center">
-            FinAI
-          </CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">FinAI</CardTitle>
           <CardDescription className="text-center text-teal-100">
             {step === "phone"
               ? "Enter your phone number to receive a one-time password"
@@ -89,10 +78,7 @@ export default function LoginPage() {
           {step === "phone" ? (
             <form onSubmit={handleSendOTP} className="space-y-4">
               <div className="space-y-2">
-                <Label
-                  htmlFor="phone"
-                  className="text-teal-800 dark:text-teal-300"
-                >
+                <Label htmlFor="phone" className="text-teal-800 dark:text-teal-300">
                   Phone Number
                 </Label>
                 <div className="relative">
@@ -126,10 +112,7 @@ export default function LoginPage() {
           ) : (
             <form onSubmit={handleVerifyOTP} className="space-y-4">
               <div className="space-y-2">
-                <Label
-                  htmlFor="otp"
-                  className="text-teal-800 dark:text-teal-300"
-                >
+                <Label htmlFor="otp" className="text-teal-800 dark:text-teal-300">
                   One-Time Password
                 </Label>
                 <div className="relative">
@@ -182,5 +165,5 @@ export default function LoginPage() {
         </CardFooter>
       </Card>
     </div>
-  );
+  )
 }
