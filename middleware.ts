@@ -12,7 +12,7 @@ export function middleware(request: NextRequest) {
   const isProtectedPath = path === "/chat" || path === "/wallet" || path === "/profile"
 
   // Check if user is authenticated
-  const isAuthenticated = request.cookies.has("finai-auth")
+  const isAuthenticated = request.cookies.has("finai-auth") || request.cookies.has("next-auth.session-token")
 
   // Redirect logic
   if (!isAuthenticated && isProtectedPath) {

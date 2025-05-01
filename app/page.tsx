@@ -145,6 +145,75 @@ export default function Home() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section className="py-16 bg-white dark:bg-slate-950">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12 gradient-text">How It Works</h2>
+
+          <div className="max-w-3xl mx-auto">
+            <div className="relative">
+              <div className="absolute left-8 top-0 bottom-0 w-0.5 bg-indigo-200 dark:bg-indigo-900"></div>
+
+              <div className="relative z-10 mb-12 group">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 group-hover:from-indigo-500 group-hover:to-blue-500 transition-all duration-300">
+                    1
+                  </div>
+                  <div className="ml-8 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-300">
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Create Your Account</h3>
+                    <p className="text-slate-600 dark:text-slate-300">
+                      Sign up with a simple OTP verification process to get started with FinAI.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 mb-12 group">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 group-hover:from-indigo-500 group-hover:to-blue-500 transition-all duration-300">
+                    2
+                  </div>
+                  <div className="ml-8 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-300">
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Set Up Your Wallet</h3>
+                    <p className="text-slate-600 dark:text-slate-300">
+                      Create your Stellar blockchain wallet to send, receive, and manage your funds securely.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 mb-12 group">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 group-hover:from-indigo-500 group-hover:to-blue-500 transition-all duration-300">
+                    3
+                  </div>
+                  <div className="ml-8 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-300">
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Chat with FinAI</h3>
+                    <p className="text-slate-600 dark:text-slate-300">
+                      Ask questions, get financial advice, and manage your finances in your preferred language.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="relative z-10 group">
+                <div className="flex items-start">
+                  <div className="flex-shrink-0 bg-gradient-to-r from-indigo-600 to-blue-600 text-white w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold group-hover:scale-110 group-hover:from-indigo-500 group-hover:to-blue-500 transition-all duration-300">
+                    4
+                  </div>
+                  <div className="ml-8 p-4 rounded-lg hover:bg-indigo-50 dark:hover:bg-indigo-900/20 transition-colors duration-300">
+                    <h3 className="text-xl font-bold mb-2 text-slate-900 dark:text-white">Learn and Grow</h3>
+                    <p className="text-slate-600 dark:text-slate-300">
+                      Improve your financial literacy with our structured learning paths and educational resources.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="py-16 cosmic-bg text-white">
         <div className="container mx-auto px-4 text-center">

@@ -1,31 +1,20 @@
-"use client";
+"use client"
 
-import type React from "react";
+import type React from "react"
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Switch } from "@/components/ui/switch";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import { useRouter } from "next/navigation";
-import {
-  saveToStorage,
-  getFromStorage,
-  STORAGE_KEYS,
-} from "@/lib/storage-service";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useState, useEffect } from "react"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Switch } from "@/components/ui/switch"
+import { Separator } from "@/components/ui/separator"
+import { Badge } from "@/components/ui/badge"
+import { useRouter } from "next/navigation"
+import { saveToStorage, getFromStorage, STORAGE_KEYS } from "@/lib/storage-service"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 import {
   CheckCircle,
   User,
@@ -38,9 +27,9 @@ import {
   CreditCard,
   ImagePlus,
   Trash2,
-} from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import LoginRedirect from "@/components/login-redirect";
+} from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
+import LoginRedirect from "@/components/login-redirect"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,40 +39,40 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from "@/components/ui/alert-dialog"
 
 interface UserProfile {
-  name: string;
-  email: string;
-  phone: string;
-  language: string;
-  currency: string;
+  name: string
+  email: string
+  phone: string
+  language: string
+  currency: string
   notifications: {
-    transactions: boolean;
-    marketing: boolean;
-    security: boolean;
-  };
-  securityLevel: "basic" | "medium" | "high";
-  learningProgress: number;
-  walletConnected: boolean;
-  profileImage?: string;
+    transactions: boolean
+    marketing: boolean
+    security: boolean
+  }
+  securityLevel: "basic" | "medium" | "high"
+  learningProgress: number
+  walletConnected: boolean
+  profileImage?: string
 }
 
 interface WalletData {
-  publicKey: string;
-  balance: string;
-  transactionHistory: any[];
-  status: "loading" | "none" | "created";
+  publicKey: string
+  balance: string
+  transactionHistory: any[]
+  status: "loading" | "none" | "created"
 }
 
 export default function ProfilePage() {
-  const { isLoggedIn, isLoading: authLoading, logout } = useAuth();
-  const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
-  const [walletData, setWalletData] = useState<WalletData | null>(null);
+  const { isLoggedIn, isLoading: authLoading, logout } = useAuth()
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isSaving, setIsSaving] = useState(false)
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [walletData, setWalletData] = useState<WalletData | null>(null)
   const [profile, setProfile] = useState<UserProfile>({
     name: "Demo User",
     email: "user@example.com",
@@ -98,90 +87,84 @@ export default function ProfilePage() {
     securityLevel: "medium",
     learningProgress: 20,
     walletConnected: true,
-  });
+  })
 
   // Simulate loading profile data
   useEffect(() => {
-    if (!isLoggedIn) return;
+    if (!isLoggedIn) return
 
-    setIsLoading(true);
+    setIsLoading(true)
 
     // Try to load profile from storage
-    const savedProfile = getFromStorage<UserProfile | null>(
-      "finai-user-profile",
-      null
-    );
+    const savedProfile = getFromStorage<UserProfile | null>("finai-user-profile", null)
 
     // Load wallet data
-    const savedWallet = getFromStorage<WalletData | null>(
-      STORAGE_KEYS.WALLET,
-      null
-    );
+    const savedWallet = getFromStorage<WalletData | null>(STORAGE_KEYS.WALLET, null)
     if (savedWallet) {
-      setWalletData(savedWallet);
+      setWalletData(savedWallet)
     }
 
     setTimeout(() => {
       if (savedProfile) {
-        setProfile(savedProfile);
+        setProfile(savedProfile)
       }
-      setIsLoading(false);
-    }, 1000);
-  }, [isLoggedIn]);
+      setIsLoading(false)
+    }, 1000)
+  }, [isLoggedIn])
 
   const handleSaveProfile = () => {
-    setIsSaving(true);
+    setIsSaving(true)
 
     // Save profile to storage
-    saveToStorage("finai-user-profile", profile);
+    saveToStorage("finai-user-profile", profile)
 
     setTimeout(() => {
-      setIsSaving(false);
-      setShowSuccess(true);
+      setIsSaving(false)
+      setShowSuccess(true)
 
       // Hide success message after 3 seconds
       setTimeout(() => {
-        setShowSuccess(false);
-      }, 3000);
-    }, 1500);
-  };
+        setShowSuccess(false)
+      }, 3000)
+    }, 1500)
+  }
 
   const handleLogout = () => {
-    logout();
-  };
+    logout()
+  }
 
   const handleDeleteAccount = () => {
     // In a real app, this would delete the account from the server
     // For now, just clear local storage and log out
-    localStorage.clear();
-    logout();
-  };
+    localStorage.clear()
+    logout()
+  }
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.target.files?.[0]
     if (file) {
-      const reader = new FileReader();
+      const reader = new FileReader()
       reader.onloadend = () => {
         // Update profile with the data URL of the image
         setProfile((prev) => ({
           ...prev,
           profileImage: reader.result as string,
-        }));
-      };
-      reader.readAsDataURL(file);
+        }))
+      }
+      reader.readAsDataURL(file)
     }
-  };
+  }
 
   if (authLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
       </div>
-    );
+    )
   }
 
   if (!isLoggedIn) {
-    return <LoginRedirect />;
+    return <LoginRedirect />
   }
 
   if (isLoading) {
@@ -189,7 +172,7 @@ export default function ProfilePage() {
       <div className="flex items-center justify-center min-h-[60vh]">
         <Loader2 className="h-8 w-8 animate-spin text-teal-500" />
       </div>
-    );
+    )
   }
 
   return (
@@ -200,13 +183,7 @@ export default function ProfilePage() {
             <CardHeader className="pb-4">
               <div className="flex justify-center mb-4 relative group">
                 <Avatar className="h-24 w-24 border-4 border-white dark:border-gray-800 shadow-lg">
-                  <AvatarImage
-                    src={
-                      profile.profileImage ||
-                      "/placeholder.svg?height=96&width=96"
-                    }
-                    alt={profile.name}
-                  />
+                  <AvatarImage src={profile.profileImage || "/placeholder.svg?height=96&width=96"} alt={profile.name} />
                   <AvatarFallback className="text-2xl bg-teal-100 text-teal-800 dark:bg-teal-900 dark:text-teal-100">
                     {profile.name
                       .split(" ")
@@ -228,9 +205,7 @@ export default function ProfilePage() {
                   />
                 </label>
               </div>
-              <CardTitle className="text-center text-2xl">
-                {profile.name}
-              </CardTitle>
+              <CardTitle className="text-center text-2xl">{profile.name}</CardTitle>
               <CardDescription className="text-center text-teal-600 dark:text-teal-400">
                 {profile.email}
               </CardDescription>
@@ -247,21 +222,18 @@ export default function ProfilePage() {
                       profile.securityLevel === "high"
                         ? "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-100"
                         : profile.securityLevel === "medium"
-                        ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
-                        : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100"
+                          ? "bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-100"
+                          : "bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-100"
                     }
                   >
-                    {profile.securityLevel.charAt(0).toUpperCase() +
-                      profile.securityLevel.slice(1)}
+                    {profile.securityLevel.charAt(0).toUpperCase() + profile.securityLevel.slice(1)}
                   </Badge>
                 </div>
 
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
                     <BookOpen className="h-5 w-5 mr-2 text-teal-600 dark:text-teal-400" />
-                    <span className="text-sm font-medium">
-                      Learning Progress
-                    </span>
+                    <span className="text-sm font-medium">Learning Progress</span>
                   </div>
                   <span className="text-sm">{profile.learningProgress}%</span>
                 </div>
@@ -278,9 +250,7 @@ export default function ProfilePage() {
                         : "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100"
                     }
                   >
-                    {walletData && walletData.status === "created"
-                      ? "Connected"
-                      : "Not Connected"}
+                    {walletData && walletData.status === "created" ? "Connected" : "Not Connected"}
                   </Badge>
                 </div>
 
@@ -323,28 +293,19 @@ export default function ProfilePage() {
               </CardHeader>
               <CardContent className="p-4 space-y-4">
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Balance:
-                  </span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Balance:</span>
+                  <span className="font-medium text-teal-600 dark:text-teal-400">{walletData.balance} XLM</span>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Estimated Value:</span>
                   <span className="font-medium text-teal-600 dark:text-teal-400">
-                    {walletData.balance} XLM
+                    ${(Number.parseFloat(walletData.balance) * 0.11).toFixed(2)} USD
                   </span>
                 </div>
 
                 <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Estimated Value:
-                  </span>
-                  <span className="font-medium text-teal-600 dark:text-teal-400">
-                    ${(Number.parseFloat(walletData.balance) * 0.11).toFixed(2)}{" "}
-                    USD
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between">
-                  <span className="text-sm text-gray-500 dark:text-gray-400">
-                    Transactions:
-                  </span>
+                  <span className="text-sm text-gray-500 dark:text-gray-400">Transactions:</span>
                   <span className="font-medium text-teal-600 dark:text-teal-400">
                     {walletData.transactionHistory.length}
                   </span>
@@ -369,9 +330,7 @@ export default function ProfilePage() {
           <Card>
             <CardHeader>
               <CardTitle>Profile Settings</CardTitle>
-              <CardDescription>
-                Manage your account settings and preferences
-              </CardDescription>
+              <CardDescription>Manage your account settings and preferences</CardDescription>
             </CardHeader>
             <CardContent>
               <Tabs defaultValue="personal" className="w-full">
@@ -406,9 +365,7 @@ export default function ProfilePage() {
                       <Input
                         id="name"
                         value={profile.name}
-                        onChange={(e) =>
-                          setProfile({ ...profile, name: e.target.value })
-                        }
+                        onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                         className="border-gray-200 dark:border-gray-700 focus-visible:ring-teal-500"
                       />
                     </div>
@@ -418,9 +375,7 @@ export default function ProfilePage() {
                         id="email"
                         type="email"
                         value={profile.email}
-                        onChange={(e) =>
-                          setProfile({ ...profile, email: e.target.value })
-                        }
+                        onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                         className="border-gray-200 dark:border-gray-700 focus-visible:ring-teal-500"
                       />
                     </div>
@@ -429,9 +384,7 @@ export default function ProfilePage() {
                       <Input
                         id="phone"
                         value={profile.phone}
-                        onChange={(e) =>
-                          setProfile({ ...profile, phone: e.target.value })
-                        }
+                        onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                         className="border-gray-200 dark:border-gray-700 focus-visible:ring-teal-500"
                       />
                     </div>
@@ -445,9 +398,7 @@ export default function ProfilePage() {
                       <select
                         id="language"
                         value={profile.language}
-                        onChange={(e) =>
-                          setProfile({ ...profile, language: e.target.value })
-                        }
+                        onChange={(e) => setProfile({ ...profile, language: e.target.value })}
                         className="w-full rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
                       >
                         <option value="English">English</option>
@@ -464,9 +415,7 @@ export default function ProfilePage() {
                       <select
                         id="currency"
                         value={profile.currency}
-                        onChange={(e) =>
-                          setProfile({ ...profile, currency: e.target.value })
-                        }
+                        onChange={(e) => setProfile({ ...profile, currency: e.target.value })}
                         className="w-full rounded-md border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-950 px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500"
                       >
                         <option value="USD">USD - US Dollar</option>
@@ -483,53 +432,23 @@ export default function ProfilePage() {
                     <Label>Security Level</Label>
                     <div className="grid grid-cols-3 gap-2">
                       <Button
-                        variant={
-                          profile.securityLevel === "basic"
-                            ? "default"
-                            : "outline"
-                        }
-                        className={
-                          profile.securityLevel === "basic"
-                            ? "bg-teal-600 hover:bg-teal-700 text-white"
-                            : ""
-                        }
-                        onClick={() =>
-                          setProfile({ ...profile, securityLevel: "basic" })
-                        }
+                        variant={profile.securityLevel === "basic" ? "default" : "outline"}
+                        className={profile.securityLevel === "basic" ? "bg-teal-600 hover:bg-teal-700 text-white" : ""}
+                        onClick={() => setProfile({ ...profile, securityLevel: "basic" })}
                       >
                         Basic
                       </Button>
                       <Button
-                        variant={
-                          profile.securityLevel === "medium"
-                            ? "default"
-                            : "outline"
-                        }
-                        className={
-                          profile.securityLevel === "medium"
-                            ? "bg-teal-600 hover:bg-teal-700 text-white"
-                            : ""
-                        }
-                        onClick={() =>
-                          setProfile({ ...profile, securityLevel: "medium" })
-                        }
+                        variant={profile.securityLevel === "medium" ? "default" : "outline"}
+                        className={profile.securityLevel === "medium" ? "bg-teal-600 hover:bg-teal-700 text-white" : ""}
+                        onClick={() => setProfile({ ...profile, securityLevel: "medium" })}
                       >
                         Medium
                       </Button>
                       <Button
-                        variant={
-                          profile.securityLevel === "high"
-                            ? "default"
-                            : "outline"
-                        }
-                        className={
-                          profile.securityLevel === "high"
-                            ? "bg-teal-600 hover:bg-teal-700 text-white"
-                            : ""
-                        }
-                        onClick={() =>
-                          setProfile({ ...profile, securityLevel: "high" })
-                        }
+                        variant={profile.securityLevel === "high" ? "default" : "outline"}
+                        className={profile.securityLevel === "high" ? "bg-teal-600 hover:bg-teal-700 text-white" : ""}
+                        onClick={() => setProfile({ ...profile, securityLevel: "high" })}
                       >
                         High
                       </Button>
@@ -552,10 +471,7 @@ export default function ProfilePage() {
                         onCheckedChange={(checked) =>
                           setProfile({
                             ...profile,
-                            notifications: {
-                              ...profile.notifications,
-                              transactions: checked,
-                            },
+                            notifications: { ...profile.notifications, transactions: checked },
                           })
                         }
                       />
@@ -566,9 +482,7 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
                         <Label htmlFor="security">Security Alerts</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Get notified about security events
-                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Get notified about security events</p>
                       </div>
                       <Switch
                         id="security"
@@ -576,10 +490,7 @@ export default function ProfilePage() {
                         onCheckedChange={(checked) =>
                           setProfile({
                             ...profile,
-                            notifications: {
-                              ...profile.notifications,
-                              security: checked,
-                            },
+                            notifications: { ...profile.notifications, security: checked },
                           })
                         }
                       />
@@ -590,9 +501,7 @@ export default function ProfilePage() {
                     <div className="flex items-center justify-between">
                       <div className="space-y-0.5">
                         <Label htmlFor="marketing">Marketing</Label>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">
-                          Receive updates about new features
-                        </p>
+                        <p className="text-sm text-gray-500 dark:text-gray-400">Receive updates about new features</p>
                       </div>
                       <Switch
                         id="marketing"
@@ -600,10 +509,7 @@ export default function ProfilePage() {
                         onCheckedChange={(checked) =>
                           setProfile({
                             ...profile,
-                            notifications: {
-                              ...profile.notifications,
-                              marketing: checked,
-                            },
+                            notifications: { ...profile.notifications, marketing: checked },
                           })
                         }
                       />
@@ -616,9 +522,7 @@ export default function ProfilePage() {
               {showSuccess && (
                 <Alert className="mr-4 flex-1 bg-green-50 text-green-800 dark:bg-green-900/30 dark:text-green-100 border-green-200 dark:border-green-800/50">
                   <CheckCircle className="h-4 w-4 mr-2" />
-                  <AlertDescription>
-                    Your profile has been updated successfully!
-                  </AlertDescription>
+                  <AlertDescription>Your profile has been updated successfully!</AlertDescription>
                 </Alert>
               )}
               <Button
@@ -646,21 +550,17 @@ export default function ProfilePage() {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Account</AlertDialogTitle>
             <AlertDialogDescription>
-              This will permanently delete your account and all associated data.
-              This action cannot be undone.
+              This will permanently delete your account and all associated data. This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction
-              onClick={handleDeleteAccount}
-              className="bg-red-600 hover:bg-red-700 text-white"
-            >
+            <AlertDialogAction onClick={handleDeleteAccount} className="bg-red-600 hover:bg-red-700 text-white">
               Yes, Delete Account
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
     </div>
-  );
+  )
 }

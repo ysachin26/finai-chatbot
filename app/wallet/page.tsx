@@ -1,53 +1,42 @@
-"use client";
-import WalletInterface from "@/components/wallet-interface";
-import { ConnectionStatus } from "@/components/connection-status";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Wallet, Shield, History, ExternalLink } from "lucide-react";
-import { useAuth } from "@/hooks/use-auth";
-import LoginRedirect from "@/components/login-redirect";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FinancialSnippet } from "@/components/financial-snippet";
-import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { getFromStorage } from "@/lib/storage-service";
-import { MicroInvestments } from "@/components/micro-investments";
-import { CreditScoring } from "@/components/credit-scoring";
+"use client"
+import WalletInterface from "@/components/wallet-interface"
+import { ConnectionStatus } from "@/components/connection-status"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Wallet, Shield, History, ExternalLink } from "lucide-react"
+import { useAuth } from "@/hooks/use-auth"
+import LoginRedirect from "@/components/login-redirect"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FinancialSnippet } from "@/components/financial-snippet"
+import { Button } from "@/components/ui/button"
+import { useState, useEffect } from "react"
+import { getFromStorage } from "@/lib/storage-service"
+import { MicroInvestments } from "@/components/micro-investments"
+import { CreditScoring } from "@/components/credit-scoring"
 
 export default function WalletPage() {
-  const { isLoggedIn, isLoading } = useAuth();
-  const [walletData, setWalletData] = useState<any>(null);
-  const [network, setNetwork] = useState<string>("testnet");
+  const { isLoggedIn, isLoading } = useAuth()
+  const [walletData, setWalletData] = useState<any>(null)
+  const [network, setNetwork] = useState<string>("testnet")
 
   useEffect(() => {
     if (isLoggedIn) {
-      const savedWallet = getFromStorage("finai-wallet", null);
+      const savedWallet = getFromStorage("finai-wallet", null)
       if (savedWallet) {
-        setWalletData(savedWallet);
+        setWalletData(savedWallet)
       }
 
       // Get network from environment variable
-      const stellarNetwork =
-        process.env.NEXT_PUBLIC_STELLAR_NETWORK || "TESTNET";
-      setNetwork(stellarNetwork.toLowerCase());
+      const stellarNetwork = process.env.NEXT_PUBLIC_STELLAR_NETWORK || "TESTNET"
+      setNetwork(stellarNetwork.toLowerCase())
     }
-  }, [isLoggedIn]);
+  }, [isLoggedIn])
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        Loading...
-      </div>
-    );
+    return <div className="flex items-center justify-center min-h-[60vh]">Loading...</div>
   }
 
   if (!isLoggedIn) {
-    return <LoginRedirect />;
+    return <LoginRedirect />
   }
 
   return (
@@ -88,30 +77,18 @@ export default function WalletPage() {
           <CardContent className="p-6">
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-medium mb-2">
-                  Verifying Your Transactions
-                </h3>
+                <h3 className="text-lg font-medium mb-2">Verifying Your Transactions</h3>
                 <p className="text-gray-600 dark:text-gray-400 mb-4">
-                  All transactions on the Stellar network are recorded on the
-                  public blockchain. You can verify any transaction by following
-                  these steps:
+                  All transactions on the Stellar network are recorded on the public blockchain. You can verify any
+                  transaction by following these steps:
                 </p>
                 <ol className="list-decimal pl-5 space-y-2 text-gray-600 dark:text-gray-400">
+                  <li>Copy your transaction ID (available in your transaction history) or your wallet's public key</li>
                   <li>
-                    Copy your transaction ID (available in your transaction
-                    history) or your wallet's public key
+                    Visit the Stellar Explorer website for the {network === "public" ? "public" : "testnet"} network
                   </li>
-                  <li>
-                    Visit the Stellar Explorer website for the{" "}
-                    {network === "public" ? "public" : "testnet"} network
-                  </li>
-                  <li>
-                    Paste your transaction ID or public key in the search box
-                  </li>
-                  <li>
-                    View the complete transaction details, including status,
-                    amount, and timestamp
-                  </li>
+                  <li>Paste your transaction ID or public key in the search box</li>
+                  <li>View the complete transaction details, including status, amount, and timestamp</li>
                 </ol>
               </div>
 
@@ -122,13 +99,10 @@ export default function WalletPage() {
                     if (walletData && walletData.publicKey) {
                       window.open(
                         `https://stellar.expert/explorer/${network}/account/${walletData.publicKey}`,
-                        "_blank"
-                      );
+                        "_blank",
+                      )
                     } else {
-                      window.open(
-                        `https://stellar.expert/explorer/${network}`,
-                        "_blank"
-                      );
+                      window.open(`https://stellar.expert/explorer/${network}`, "_blank")
                     }
                   }}
                 >
@@ -165,9 +139,7 @@ export default function WalletPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
-                    <span>
-                      Double-check recipient addresses before sending funds
-                    </span>
+                    <span>Double-check recipient addresses before sending funds</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-amber-500 font-bold">•</span>
@@ -183,15 +155,11 @@ export default function WalletPage() {
                 <ul className="space-y-3">
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">•</span>
-                    <span>
-                      Use the memo field to add notes to your transactions
-                    </span>
+                    <span>Use the memo field to add notes to your transactions</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">•</span>
-                    <span>
-                      Keep a small amount of XLM in your account as a reserve
-                    </span>
+                    <span>Keep a small amount of XLM in your account as a reserve</span>
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">•</span>
@@ -199,9 +167,7 @@ export default function WalletPage() {
                   </li>
                   <li className="flex items-start gap-2">
                     <span className="text-indigo-500 font-bold">•</span>
-                    <span>
-                      Use the chat assistant for help with wallet operations
-                    </span>
+                    <span>Use the chat assistant for help with wallet operations</span>
                   </li>
                 </ul>
               </TabsContent>
@@ -215,48 +181,33 @@ export default function WalletPage() {
               <History className="h-5 w-5" />
               Transaction History
             </CardTitle>
-            <CardDescription className="text-indigo-100">
-              Your recent wallet activity
-            </CardDescription>
+            <CardDescription className="text-indigo-100">Your recent wallet activity</CardDescription>
           </CardHeader>
           <CardContent className="p-6 bg-gradient-to-b from-white to-gray-50 dark:from-gray-900 dark:to-gray-800">
-            {walletData &&
-            walletData.transactionHistory &&
-            walletData.transactionHistory.length > 0 ? (
+            {walletData && walletData.transactionHistory && walletData.transactionHistory.length > 0 ? (
               <div className="space-y-3 max-h-[300px] overflow-y-auto pr-2">
-                {walletData.transactionHistory
-                  .slice(0, 5)
-                  .map((tx: any, index: number) => (
-                    <div
-                      key={tx.id}
-                      className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg flex justify-between items-center bg-white/50 dark:bg-gray-800/50"
-                    >
-                      <div>
-                        <div className="font-medium text-sm">
-                          {tx.type === "sent" ? "Sent to" : "Received from"}
-                        </div>
-                        <div className="text-xs text-gray-500 truncate max-w-[150px]">
-                          {tx.type === "sent" ? tx.to : tx.from}
-                        </div>
-                        <div className="text-xs text-gray-400">
-                          {new Date(tx.timestamp).toLocaleString()}
-                        </div>
+                {walletData.transactionHistory.slice(0, 5).map((tx: any, index: number) => (
+                  <div
+                    key={tx.id}
+                    className="p-3 border border-gray-200 dark:border-gray-700 rounded-lg flex justify-between items-center bg-white/50 dark:bg-gray-800/50"
+                  >
+                    <div>
+                      <div className="font-medium text-sm">{tx.type === "sent" ? "Sent to" : "Received from"}</div>
+                      <div className="text-xs text-gray-500 truncate max-w-[150px]">
+                        {tx.type === "sent" ? tx.to : tx.from}
                       </div>
-                      <div
-                        className={`font-medium ${
-                          tx.type === "sent" ? "text-red-500" : "text-green-500"
-                        }`}
-                      >
-                        {tx.type === "sent" ? "-" : "+"}
-                        {tx.amount} XLM
-                      </div>
+                      <div className="text-xs text-gray-400">{new Date(tx.timestamp).toLocaleString()}</div>
                     </div>
-                  ))}
+                    <div className={`font-medium ${tx.type === "sent" ? "text-red-500" : "text-green-500"}`}>
+                      {tx.type === "sent" ? "-" : "+"}
+                      {tx.amount} XLM
+                    </div>
+                  </div>
+                ))}
               </div>
             ) : (
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
-                Your transaction history will appear here once you start using
-                your wallet.
+                Your transaction history will appear here once you start using your wallet.
               </p>
             )}
           </CardContent>
@@ -265,5 +216,5 @@ export default function WalletPage() {
 
       <ConnectionStatus />
     </div>
-  );
+  )
 }
