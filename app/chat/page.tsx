@@ -1,124 +1,152 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useEffect, useState } from "react"
-import ChatInterface from "@/components/chat-interface"
-import { ConnectionStatus } from "@/components/connection-status"
-import { MessageCircle, MessageSquarePlus, Trash2, History } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { getFromStorage, saveToStorage } from "@/lib/storage-service"
-import { useAuth } from "@/hooks/use-auth"
-import LoginRedirect from "@/components/login-redirect"
+import { useEffect, useState } from "react";
+import ChatInterface from "@/components/chat-interface";
+import { ConnectionStatus } from "@/components/connection-status";
+import {
+  MessageCircle,
+  MessageSquarePlus,
+  Trash2,
+  History,
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { getFromStorage, saveToStorage } from "@/lib/storage-service";
+import { useAuth } from "@/hooks/use-auth";
+import LoginRedirect from "@/components/login-redirect";
 
 interface ChatSession {
-  id: string
-  title: string
-  preview: string
-  timestamp: string
-  messages: any[]
+  id: string;
+  title: string;
+  preview: string;
+  timestamp: string;
+  messages: any[];
 }
 
 export default function ChatPage() {
-  const { isLoggedIn, isLoading } = useAuth()
-  const [chatSessions, setChatSessions] = useState<ChatSession[]>([])
-  const [activeSessionId, setActiveSessionId] = useState<string>("new")
+  const { isLoggedIn, isLoading } = useAuth();
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>([]);
+  const [activeSessionId, setActiveSessionId] = useState<string>("new");
 
   useEffect(() => {
     // Load saved chat sessions
-    const savedSessions = getFromStorage<ChatSession[]>("finai-chat-sessions", [])
+    const savedSessions = getFromStorage<ChatSession[]>(
+      "finai-chat-sessions",
+      []
+    );
     if (savedSessions.length > 0) {
-      setChatSessions(savedSessions)
+      setChatSessions(savedSessions);
     }
-  }, [])
+  }, []);
 
   const createNewSession = () => {
-    setActiveSessionId("new")
-  }
+    setActiveSessionId("new");
+  };
 
   const deleteSession = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation()
-    setChatSessions((prev) => prev.filter((session) => session.id !== id))
+    e.stopPropagation();
+    setChatSessions((prev) => prev.filter((session) => session.id !== id));
 
     // Update storage
-    const updatedSessions = chatSessions.filter((session) => session.id !== id)
-    saveToStorage("finai-chat-sessions", updatedSessions)
+    const updatedSessions = chatSessions.filter((session) => session.id !== id);
+    saveToStorage("finai-chat-sessions", updatedSessions);
 
     // If deleting the active session, switch to a new one
     if (id === activeSessionId) {
-      setActiveSessionId("new")
+      setActiveSessionId("new");
     }
-  }
+  };
 
   const saveSession = (id: string, messages: any[]) => {
     // If this is a new session, create it
     if (id === "new" && messages.length > 0) {
-      const userMessages = messages.filter((m) => m.role === "user")
-      const lastUserMessage = userMessages[userMessages.length - 1]?.content || "New conversation"
-      const assistantMessages = messages.filter((m) => m.role === "assistant")
-      const lastAssistantMessage = assistantMessages[assistantMessages.length - 1]?.content || ""
+      const userMessages = messages.filter((m) => m.role === "user");
+      const lastUserMessage =
+        userMessages[userMessages.length - 1]?.content || "New conversation";
+      const assistantMessages = messages.filter((m) => m.role === "assistant");
+      const lastAssistantMessage =
+        assistantMessages[assistantMessages.length - 1]?.content || "";
 
       const newSession: ChatSession = {
         id: `session-${Date.now()}`,
-        title: lastUserMessage.length > 30 ? lastUserMessage.substring(0, 30) + "..." : lastUserMessage,
+        title:
+          lastUserMessage.length > 30
+            ? lastUserMessage.substring(0, 30) + "..."
+            : lastUserMessage,
         preview:
-          lastAssistantMessage.length > 50 ? lastAssistantMessage.substring(0, 50) + "..." : lastAssistantMessage,
+          lastAssistantMessage.length > 50
+            ? lastAssistantMessage.substring(0, 50) + "..."
+            : lastAssistantMessage,
         timestamp: new Date().toISOString(),
         messages: messages,
-      }
+      };
 
-      const updatedSessions = [newSession, ...chatSessions]
-      setChatSessions(updatedSessions)
-      setActiveSessionId(newSession.id)
+      const updatedSessions = [newSession, ...chatSessions];
+      setChatSessions(updatedSessions);
+      setActiveSessionId(newSession.id);
 
       // Update storage
-      saveToStorage("finai-chat-sessions", updatedSessions)
+      saveToStorage("finai-chat-sessions", updatedSessions);
 
       // Save messages for this session
-      saveToStorage(`finai-chat-${newSession.id}`, messages)
-      return newSession.id
+      saveToStorage(`finai-chat-${newSession.id}`, messages);
+      return newSession.id;
     } else if (id !== "new") {
       // Update existing session
-      const sessionIndex = chatSessions.findIndex((s) => s.id === id)
+      const sessionIndex = chatSessions.findIndex((s) => s.id === id);
 
       if (sessionIndex !== -1 && messages.length > 0) {
-        const userMessages = messages.filter((m) => m.role === "user")
-        const lastUserMessage = userMessages[userMessages.length - 1]?.content || "Conversation"
-        const assistantMessages = messages.filter((m) => m.role === "assistant")
-        const lastAssistantMessage = assistantMessages[assistantMessages.length - 1]?.content || ""
+        const userMessages = messages.filter((m) => m.role === "user");
+        const lastUserMessage =
+          userMessages[userMessages.length - 1]?.content || "Conversation";
+        const assistantMessages = messages.filter(
+          (m) => m.role === "assistant"
+        );
+        const lastAssistantMessage =
+          assistantMessages[assistantMessages.length - 1]?.content || "";
 
         const updatedSession: ChatSession = {
           ...chatSessions[sessionIndex],
-          title: lastUserMessage.length > 30 ? lastUserMessage.substring(0, 30) + "..." : lastUserMessage,
+          title:
+            lastUserMessage.length > 30
+              ? lastUserMessage.substring(0, 30) + "..."
+              : lastUserMessage,
           preview:
-            lastAssistantMessage.length > 50 ? lastAssistantMessage.substring(0, 50) + "..." : lastAssistantMessage,
+            lastAssistantMessage.length > 50
+              ? lastAssistantMessage.substring(0, 50) + "..."
+              : lastAssistantMessage,
           timestamp: new Date().toISOString(),
           messages: messages,
-        }
+        };
 
-        const updatedSessions = [...chatSessions]
-        updatedSessions[sessionIndex] = updatedSession
-        setChatSessions(updatedSessions)
+        const updatedSessions = [...chatSessions];
+        updatedSessions[sessionIndex] = updatedSession;
+        setChatSessions(updatedSessions);
 
         // Update storage
-        saveToStorage("finai-chat-sessions", updatedSessions)
+        saveToStorage("finai-chat-sessions", updatedSessions);
 
         // Save messages for this session
-        saveToStorage(`finai-chat-${id}`, messages)
+        saveToStorage(`finai-chat-${id}`, messages);
       }
-      return id
+      return id;
     }
-    return id
-  }
+    return id;
+  };
 
   if (isLoading) {
-    return <div className="flex items-center justify-center min-h-[60vh]">Loading...</div>
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        Loading...
+      </div>
+    );
   }
 
   if (!isLoggedIn) {
-    return <LoginRedirect />
+    return <LoginRedirect />;
   }
 
   return (
@@ -144,7 +172,9 @@ export default function ChatPage() {
             <ScrollArea className="flex-1">
               <div className="space-y-2 pr-3">
                 {chatSessions.length === 0 ? (
-                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">No chat history yet</div>
+                  <div className="text-center py-8 text-gray-500 dark:text-gray-400">
+                    No chat history yet
+                  </div>
                 ) : (
                   chatSessions.map((session) => (
                     <div
@@ -173,7 +203,9 @@ export default function ChatPage() {
                       <p className="text-xs text-gray-500 dark:text-gray-400 line-clamp-2">
                         {session.preview || "..."}
                       </p>
-                      <div className="text-xs text-gray-400 mt-1">{new Date(session.timestamp).toLocaleString()}</div>
+                      <div className="text-xs text-gray-400 mt-1">
+                        {new Date(session.timestamp).toLocaleString()}
+                      </div>
                     </div>
                   ))
                 )}
@@ -188,16 +220,21 @@ export default function ChatPage() {
         <div className="mb-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <MessageCircle className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />
-            <h1 className="text-2xl font-bold gradient-text">Financial Assistant</h1>
+            <h1 className="text-2xl font-bold gradient-text">
+              Financial Assistant
+            </h1>
           </div>
         </div>
 
         <div className="flex-1 overflow-hidden">
-          <ChatInterface sessionId={activeSessionId} onSaveSession={saveSession} />
+          <ChatInterface
+            sessionId={activeSessionId}
+            onSaveSession={saveSession}
+          />
         </div>
 
         <ConnectionStatus />
       </div>
     </div>
-  )
+  );
 }
